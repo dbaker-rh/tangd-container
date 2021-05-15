@@ -37,6 +37,8 @@ spec:
 
       securityContext:
         runAsNonRoot: true
+        runAsUser: 2000
+        fsGroup: 2000
 
       volumes:
       - name: data
@@ -76,6 +78,8 @@ spec:
 
       securityContext:
         runAsNonRoot: true
+        runAsUser: 2000
+        fsGroup: 2000
 
       volumes:
       - name: data
@@ -115,6 +119,8 @@ spec:
 
       securityContext:
         runAsNonRoot: true
+        runAsUser: 2000
+        fsGroup: 2000
 
       volumes:
       - name: data
@@ -125,7 +131,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tangd-1
+  name: tangd1
   namespace: tang
 spec:
   ports:
@@ -140,7 +146,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tangd-2
+  name: tangd2
   namespace: tang
 spec:
   ports:
@@ -155,7 +161,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: tangd-3
+  name: tangd3
   namespace: tang
 spec:
   ports:
