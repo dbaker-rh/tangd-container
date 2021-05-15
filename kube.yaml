@@ -224,6 +224,9 @@ spec:
       storage: 128Mi
 
 ---
+# For the load balanced ingress to work, the tang servers will need to share
+# the same key material.  If not, decryption will work approximately one
+# in every three tries.
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
