@@ -84,7 +84,7 @@ spec:
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: tangdaemon-data1
+          claimName: tangdaemon-data2
 
 ---
 apiVersion: apps/v1
@@ -125,7 +125,7 @@ spec:
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: tangdaemon-data1
+          claimName: tangdaemon-data3
 
 ---
 apiVersion: v1
@@ -246,19 +246,19 @@ spec:
     match: Host(`tang1.example.com`)    ## Replace me
     services:
     - kind: Service
-      name: tangd-1
+      name: tangd1
       port: 8080
   - kind: Rule
     match: Host(`tang2.example.com`)    ## Replace me
     services:
     - kind: Service
-      name: tangd-2
+      name: tangd2
       port: 8080
   - kind: Rule
     match: Host(`tang3.example.com`)    ## Replace me
     services:
     - kind: Service
-      name: tangd-3
+      name: tangd3
       port: 8080
 
 
