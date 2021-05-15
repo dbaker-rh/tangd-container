@@ -44,6 +44,84 @@ spec:
           claimName: tangdaemon-data1
 
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tangd2
+  namespace: tang
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      name: tang
+      name: tang2
+  template:
+    metadata:
+      labels:
+        name: tang
+        name: tang2
+    spec:
+      containers:
+      - image: quay.io/dbaker/test:tangd  ## xxx replace me
+        imagePullPolicy: IfNotPresent
+        name: tang
+        ports:
+        - containerPort: 8080
+          name: tcp8080
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/db/tang
+          name: data
+
+      securityContext:
+        runAsNonRoot: true
+
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: tangdaemon-data1
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tangd3
+  namespace: tang
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      name: tang
+      name: tang3
+  template:
+    metadata:
+      labels:
+        name: tang
+        name: tang3
+    spec:
+      containers:
+      - image: quay.io/dbaker/test:tangd  ## xxx replace me
+        imagePullPolicy: IfNotPresent
+        name: tang
+        ports:
+        - containerPort: 8080
+          name: tcp8080
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/db/tang
+          name: data
+
+      securityContext:
+        runAsNonRoot: true
+
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: tangdaemon-data1
+
+---
 apiVersion: v1
 kind: Service
 metadata:
