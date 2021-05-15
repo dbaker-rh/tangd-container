@@ -15,13 +15,12 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      name: tang
       name: tang1
   template:
     metadata:
       labels:
-        name: tang
         name: tang1
+        lb: tang-all
     spec:
       containers:
       - image: quay.io/dbaker/test:tangd  ## xxx replace me
@@ -56,13 +55,12 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      name: tang
       name: tang2
   template:
     metadata:
       labels:
-        name: tang
         name: tang2
+        lb: tang-all
     spec:
       containers:
       - image: quay.io/dbaker/test:tangd  ## xxx replace me
@@ -97,13 +95,12 @@ spec:
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      name: tang
       name: tang3
   template:
     metadata:
       labels:
-        name: tang
         name: tang3
+        lb: tang-all
     spec:
       containers:
       - image: quay.io/dbaker/test:tangd  ## xxx replace me
@@ -185,7 +182,7 @@ spec:
     protocol: TCP
     targetPort: 8080
   selector:
-    name: tang
+    lb: tang-all
 
 ---
 apiVersion: v1
