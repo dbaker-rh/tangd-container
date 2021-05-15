@@ -8,7 +8,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tangdaemon
+  name: tangd1
   namespace: tang
 spec:
   replicas: 1
@@ -16,14 +16,16 @@ spec:
   selector:
     matchLabels:
       name: tang
+      name: tang1
   template:
     metadata:
       labels:
         name: tang
+        name: tang1
     spec:
       containers:
       - image: quay.io/dbaker/test:tangd  ## xxx replace me
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: tang
         ports:
         - containerPort: 8080
@@ -39,13 +41,58 @@ spec:
       volumes:
       - name: data
         persistentVolumeClaim:
-          claimName: tangdaemon-data
+          claimName: tangdaemon-data1
 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: tangdaemon-svc
+  name: tangd-1
+  namespace: tang
+spec:
+  ports:
+  - name: tcp8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    name: tang1
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tangd-2
+  namespace: tang
+spec:
+  ports:
+  - name: tcp8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    name: tang2
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tangd-3
+  namespace: tang
+spec:
+  ports:
+  - name: tcp8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    name: tang3
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tangd-all
   namespace: tang
 spec:
   ports:
@@ -60,35 +107,40 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: tangdaemon-data
+  name: tangdaemon-data1
   namespace: tang
 spec:
   accessModes:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 256Mi
+      storage: 128Mi
 
 ---
-# Disable this unless you have traefik working with dns certs
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
+apiVersion: v1
+kind: PersistentVolumeClaim
 metadata:
-  name: tang-443
+  name: tangdaemon-data2
   namespace: tang
 spec:
-  entryPoints:
-  - websecure
-  routes:
-  - kind: Rule
-    match: Host(`tang.example.com`)    ## Replace me
-    services:
-    - kind: Service
-      name: tangdaemon-svc
-      port: 8080
-  tls:
-    certResolver: dns
-    options: {}
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 128Mi
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tangdaemon-data2
+  namespace: tang
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 128Mi
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
@@ -104,7 +156,25 @@ spec:
     match: Host(`tang.example.com`)    ## Replace me
     services:
     - kind: Service
-      name: tangdaemon-svc
+      name: tangd-all
+      port: 8080
+  - kind: Rule
+    match: Host(`tang1.example.com`)    ## Replace me
+    services:
+    - kind: Service
+      name: tangd-1
+      port: 8080
+  - kind: Rule
+    match: Host(`tang2.example.com`)    ## Replace me
+    services:
+    - kind: Service
+      name: tangd-2
+      port: 8080
+  - kind: Rule
+    match: Host(`tang3.example.com`)    ## Replace me
+    services:
+    - kind: Service
+      name: tangd-3
       port: 8080
 
 
