@@ -1,0 +1,110 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tang
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tangdaemon
+  namespace: tang
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      name: tang
+  template:
+    metadata:
+      labels:
+        name: tang
+    spec:
+      containers:
+      - image: quay.io/dbaker/test:tangd  ## xxx replace me
+        imagePullPolicy: Always
+        name: tang
+        ports:
+        - containerPort: 8080
+          name: tcp8080
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/db/tang
+          name: data
+
+      securityContext:
+        runAsNonRoot: true
+
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: tangdaemon-data
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tangdaemon-svc
+  namespace: tang
+spec:
+  ports:
+  - name: tcp8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    name: tang
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tangdaemon-data
+  namespace: tang
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 256Mi
+
+---
+# Disable this unless you have traefik working with dns certs
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: tang-443
+  namespace: tang
+spec:
+  entryPoints:
+  - websecure
+  routes:
+  - kind: Rule
+    match: Host(`tang.example.com`)    ## Replace me
+    services:
+    - kind: Service
+      name: tangdaemon-svc
+      port: 8080
+  tls:
+    certResolver: dns
+    options: {}
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: tang-80
+  namespace: tang
+spec:
+  entryPoints:
+  - web
+  routes:
+  - kind: Rule
+    match: Host(`tang.example.com`)    ## Replace me
+    services:
+    - kind: Service
+      name: tangdaemon-svc
+      port: 8080
+
+
