@@ -20,7 +20,7 @@ COPY --from=build /usr/libexec/tangd /usr/libexec/tangd
 COPY --from=build /usr/libexec/tangd-keygen /usr/libexec/tangd-keygen
 COPY --from=build /usr/libexec/tangd-rotate-keys /usr/libexec/tangd-rotate-keys
 
-RUN apk add --no-cache bash socat http-parser jansson zlib openssl curl
+RUN apk add --no-cache bash socat http-parser jansson zlib openssl curl busybox-extras
 EXPOSE 8080
 
 USER 1000
