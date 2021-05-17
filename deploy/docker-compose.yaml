@@ -1,0 +1,40 @@
+---
+version: "3"
+
+# TODO: define networks to only expose containers via traefik and not directly on their ports
+
+services:
+
+  traefik:
+    image: "traefik:v2.4"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.traefiK.address=:9090"
+    ports:
+      - "80:80"      # web entrypoint
+      - "9090:9090"  # api server
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: always
+
+
+  tang:
+    image: quay.io/dbaker/test:tangd  ## xxx replace me
+    container_name: "tangd"
+    ports:
+      - "8080:8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.whoami.rule=Host(`tang.EXAMPLE.com`, `tang-abc.EXAMPLE.com`)"
+      - "traefik.http.routers.whoami.entrypoints=web"
+    volumes:
+      # Left separately to use ecryptfs or similar to encrypt this; otherwise we could
+      # put it in a docker volume for convenience.
+      - "/root/.private/tangd:/var/db/tang"
+    restart: always
+
+
