@@ -1,16 +1,14 @@
 #---
-# Dockerfile here for Raspberry Pi Zero compilation
+# Containerfile for Raspberry Pi Zero (armhf) compilation
 # - For unknown reasons, "apk add" segfaults on versions later than 3.8
-# - This earlier version uses mpfr3 (not mpfr4) so we just pull in mpfr-dev
-#   and let it work out it's own dependencies.
 #
 
 FROM docker.io/alpine:3.8 AS build
 
 LABEL maintainer="Dave Baker <dbaker@redhat.com>"
 
-# mpfr4
-RUN apk add --no-cache git g++ musl musl-dev bash gawk gzip make tar gmp mpfr-dev mpc1 mpc1-dev isl isl-dev http-parser-dev autoconf automake gcc make meson ninja openssl-dev jansson-dev zlib-dev patch
+RUN apk add --no-cache git g++ bash gawk gzip make tar autoconf automake gcc make meson ninja   \
+                       git g++ musl-dev gmp mpfr-dev mpc1-dev isl-dev http-parser-dev openssl-dev jansson-dev zlib-dev
 
 RUN git clone https://github.com/latchset/jose.git && cd jose && meson build && cd build && ninja && ninja install
 RUN git clone https://github.com/latchset/tang.git
