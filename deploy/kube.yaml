@@ -237,13 +237,13 @@ spec:
   - web
   routes:
   - kind: Rule
-    match: Host(`tang.example.com`)    ## Replace me
+    match: Host(`tang-all.example.com`)    ## Replace me
     services:
     - kind: Service
       name: tangd-all
       port: 8080
   - kind: Rule
-    match: Host(`tang1.example.com`)    ## Replace me
+    match: Host(`tang.example.com`, `tang1.example.com`)    ## Replace me
     services:
     - kind: Service
       name: tangd1
