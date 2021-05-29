@@ -27,8 +27,8 @@ spec:
         imagePullPolicy: IfNotPresent
         name: tang
         ports:
-        - containerPort: 8080
-          name: tcp8080
+        - containerPort: 7500
+          name: tcp7500
           protocol: TCP
         volumeMounts:
         - mountPath: /var/db/tang
@@ -67,8 +67,8 @@ spec:
         imagePullPolicy: IfNotPresent
         name: tang
         ports:
-        - containerPort: 8080
-          name: tcp8080
+        - containerPort: 7500
+          name: tcp7500
           protocol: TCP
         volumeMounts:
         - mountPath: /var/db/tang
@@ -107,8 +107,8 @@ spec:
         imagePullPolicy: IfNotPresent
         name: tang
         ports:
-        - containerPort: 8080
-          name: tcp8080
+        - containerPort: 7500
+          name: tcp7500
           protocol: TCP
         volumeMounts:
         - mountPath: /var/db/tang
@@ -132,10 +132,10 @@ metadata:
   namespace: tang
 spec:
   ports:
-  - name: tcp8080
-    port: 8080
+  - name: tcp7500
+    port: 7500
     protocol: TCP
-    targetPort: 8080
+    targetPort: 7500
   selector:
     name: tang1
 
@@ -147,10 +147,10 @@ metadata:
   namespace: tang
 spec:
   ports:
-  - name: tcp8080
-    port: 8080
+  - name: tcp7500
+    port: 7500
     protocol: TCP
-    targetPort: 8080
+    targetPort: 7500
   selector:
     name: tang2
 
@@ -162,10 +162,10 @@ metadata:
   namespace: tang
 spec:
   ports:
-  - name: tcp8080
-    port: 8080
+  - name: tcp7500
+    port: 7500
     protocol: TCP
-    targetPort: 8080
+    targetPort: 7500
   selector:
     name: tang3
 
@@ -177,10 +177,10 @@ metadata:
   namespace: tang
 spec:
   ports:
-  - name: tcp8080
-    port: 8080
+  - name: tcp7500
+    port: 7500
     protocol: TCP
-    targetPort: 8080
+    targetPort: 7500
   selector:
     lb: tang-all
 
@@ -241,24 +241,24 @@ spec:
     services:
     - kind: Service
       name: tangd-all
-      port: 8080
+      port: 7500
   - kind: Rule
     match: Host(`tang.example.com`, `tang1.example.com`)    ## Replace me
     services:
     - kind: Service
       name: tangd1
-      port: 8080
+      port: 7500
   - kind: Rule
     match: Host(`tang2.example.com`)    ## Replace me
     services:
     - kind: Service
       name: tangd2
-      port: 8080
+      port: 7500
   - kind: Rule
     match: Host(`tang3.example.com`)    ## Replace me
     services:
     - kind: Service
       name: tangd3
-      port: 8080
+      port: 7500
 
 
