@@ -8,7 +8,7 @@ FROM docker.io/alpine:3.8 AS build
 LABEL maintainer="Dave Baker <dbaker@redhat.com>"
 
 RUN apk add --no-cache git g++ bash gawk gzip make tar autoconf automake gcc make meson ninja   \
-                       git g++ musl-dev gmp mpfr-dev mpc1-dev isl-dev http-parser-dev openssl-dev jansson-dev zlib-dev
+                       musl-dev gmp mpfr-dev mpc1-dev isl-dev http-parser-dev openssl-dev jansson-dev zlib-dev
 
 RUN git clone https://github.com/latchset/jose.git && cd jose && meson build && cd build && ninja && ninja install
 RUN git clone https://github.com/latchset/tang.git
@@ -25,7 +25,7 @@ COPY --from=build /usr/libexec/tangd /usr/libexec/tangd
 COPY --from=build /usr/libexec/tangd-keygen /usr/libexec/tangd-keygen
 COPY --from=build /usr/libexec/tangd-rotate-keys /usr/libexec/tangd-rotate-keys
 
-RUN apk add --no-cache bash socat http-parser jansson zlib openssl curl
+RUN apk add --no-cache bash socat http-parser jansson zlib openssl curl busybox-extras
 EXPOSE 7500
 
 USER 1000

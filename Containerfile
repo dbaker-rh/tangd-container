@@ -3,7 +3,8 @@ FROM docker.io/alpine:3.13 AS build
 
 LABEL maintainer="Dave Baker <dbaker@redhat.com>"
 
-RUN apk add --no-cache git g++ musl musl-dev bash gawk gzip make tar gmp mpfr4 mpfr-dev mpc1 mpc1-dev isl isl-dev http-parser-dev autoconf automake gcc make meson ninja openssl-dev jansson-dev zlib-dev patch
+RUN apk add --no-cache git g++ bash gawk gzip make tar autoconf automake gcc make meson ninja   \
+                       musl-dev gmp mpfr-dev mpc1-dev isl-dev http-parser-dev openssl-dev jansson-dev zlib-dev
 
 RUN git clone https://github.com/latchset/jose.git && cd jose && meson build && cd build && ninja && ninja install
 RUN git clone https://github.com/latchset/tang.git
