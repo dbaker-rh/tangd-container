@@ -1,6 +1,5 @@
 #---
 FROM docker.io/alpine:3.13 AS build
-
 LABEL maintainer="Dave Baker <dbaker@redhat.com>"
 
 RUN apk add --no-cache git g++ bash gawk gzip make tar autoconf automake gcc make meson ninja   \
@@ -13,6 +12,8 @@ RUN cd tang && mkdir build && cd build && meson .. --prefix=/usr && ninja && nin
 
 #---
 FROM docker.io/alpine:3.13
+LABEL maintainer="Dave Baker <dbaker@redhat.com>"
+
 COPY --from=build /usr/bin/jose /usr/bin/jose
 COPY --from=build /usr/lib/libjose.so.0 /usr/lib/libjose.so.0
 COPY --from=build /usr/lib/libjose.so.0.0.0 /usr/lib/libjose.so.0.0.0
