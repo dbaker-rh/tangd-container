@@ -7,5 +7,6 @@ if [ ! -z "$CREATE_TANG_KEYS" ]; then
 fi
 
 # Start listener
+set -x
 socat tcp-l:7500,reuseaddr,fork exec:"/usr/libexec/tangd /var/db/tang"
 
