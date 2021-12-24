@@ -14,6 +14,9 @@ RUN cd tang && mkdir build && cd build && meson .. --prefix=/usr && ninja && nin
 FROM docker.io/alpine:3.15
 LABEL maintainer="Dave Baker <dbaker@redhat.com>"
 
+RUN apk add --no-cache bash socat http-parser jansson zlib openssl curl busybox-extras
+
+# Copy files from build container
 COPY --from=build /usr/bin/jose /usr/bin/jose
 COPY --from=build /usr/lib/libjose.so.0 /usr/lib/libjose.so.0
 COPY --from=build /usr/lib/libjose.so.0.0.0 /usr/lib/libjose.so.0.0.0
@@ -22,10 +25,12 @@ COPY --from=build /usr/libexec/tangd /usr/libexec/tangd
 COPY --from=build /usr/libexec/tangd-keygen /usr/libexec/tangd-keygen
 COPY --from=build /usr/libexec/tangd-rotate-keys /usr/libexec/tangd-rotate-keys
 
-RUN apk add --no-cache bash socat http-parser jansson zlib openssl curl busybox-extras
+# Squelch warning on signal trap
+RUN sed -i -e '/^trap/ { s/^/#/; }' /usr/libexec/tangd-keygen
 
 EXPOSE 7500
 
+# Run as non-root
 USER 1000
 
 COPY start.sh /

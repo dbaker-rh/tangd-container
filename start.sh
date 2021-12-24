@@ -1,8 +1,11 @@
 #!/bin/sh
 set -e
-#mkdir -p /var/db/tang /var/cache/tang
-#grep -r -q '"sign"' /var/db/tang || /usr/libexec/tangd-keygen /var/db/tang
-#/usr/libexec/tangd-update /var/db/tang /var/cache/tang
 
+# Optionally create new keys if none exist
+if [ ! -z "$CREATE_TANG_KEYS" ]; then
+  grep -r -q '"sign"' /var/db/tang || /usr/libexec/tangd-keygen /var/db/tang
+fi
+
+# Start listener
 socat tcp-l:7500,reuseaddr,fork exec:"/usr/libexec/tangd /var/db/tang"
 
