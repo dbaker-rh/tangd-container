@@ -2,7 +2,7 @@
 FROM docker.io/alpine:3.15 AS build
 LABEL maintainer="Dave Baker <dbaker@redhat.com>"
 
-RUN apk add --no-cache git g++ bash gawk gzip make tar autoconf automake gcc make meson ninja   \
+RUN apk add --no-cache git g++ bash gawk gzip make tar autoconf automake gcc meson ninja   \
                        musl-dev gmp mpfr-dev mpc1-dev isl-dev http-parser-dev openssl-dev jansson-dev zlib-dev
 
 RUN git clone https://github.com/latchset/jose.git && cd jose && meson build && cd build && ninja && ninja install
