@@ -1,5 +1,5 @@
 #---
-FROM docker.io/alpine:3.15 AS build
+FROM docker.io/alpine:3.19 AS build
 LABEL maintainer="Dave Baker <dbaker@redhat.com>"
 
 RUN apk add --no-cache git g++ bash gawk gzip make tar autoconf automake gcc meson ninja   \
@@ -11,7 +11,7 @@ RUN cd tang && mkdir build && cd build && meson .. --prefix=/usr && ninja && nin
 
 
 #---
-FROM docker.io/alpine:3.15
+FROM docker.io/alpine:3.19
 LABEL maintainer="Dave Baker <dbaker@redhat.com>"
 
 RUN apk add --no-cache bash socat http-parser jansson zlib openssl curl busybox-extras

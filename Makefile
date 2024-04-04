@@ -5,4 +5,7 @@ build:
 
 push:
 	podman push quay.io/dbaker/tangd:latest-amd64
+	# TODO: multi-arch
+	podman tag quay.io/dbaker/tangd:latest-amd64 quay.io/dbaker/tangd:latest
+	podman push quay.io/dbaker/tangd:latest
 
