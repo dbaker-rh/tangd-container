@@ -7,7 +7,9 @@ RUN apk add --no-cache git g++ bash gawk gzip make tar autoconf automake gcc mes
 
 RUN git clone https://github.com/latchset/jose.git && cd jose && meson build && cd build && ninja && ninja install
 RUN git clone https://github.com/latchset/tang.git
-RUN cd tang && mkdir build && cd build && meson .. --prefix=/usr && ninja && ninja install
+RUN cd tang && mkdir build && cd build && \
+       meson .. --prefix=/usr          && \
+       ninja && ninja install
 
 
 #---
