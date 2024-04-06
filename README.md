@@ -11,10 +11,39 @@ kubernetes cluster, alternatively building against Alpine 3.8 (for Raspberry Pi 
 
 ## Notes
 
-These alpine images are tiny (approx 6MB), far smaller than an equivalent UBI based image, and although
-unsupported are well suited to a small development lab, e.g. one that uses rPi.
+These alpine images are tiny (approx 6MB), far smaller than an equivalent UBI
+based image, and although unsupported are well suited to a small development
+lab, e.g. one that uses rPi.
 
 For production use, you should "dnf install tang" on RHEL or UBI.
+
+
+## Multiarch notes
+
+I've not had luck with "buildx", nor pushing multiarch images to quay.io
+but it works fine on docker hub.  To be debugged at a later stage.
+
+For x86:
+  make build
+
+For arm, run locally on a raspberry pi
+  docker build ....
+
+REPOUSER=dbakerrh
+VER=3.19
+
+podman pull docker.io/$REPOUSER/tangd:${VER}-amd64
+podman pull docker.io/$REPOUSER/tangd:${VER}-armhf
+
+podman rmi docker.io/$REPOUSER/tangd:$VER
+
+podman manifest create docker.io/$REPOUSER/tangd:$VER \
+       --amend docker.io/$REPOUSER/tangd:${VER}-amd64 \
+       --amend docker.io/$REPOUSER/tangd:${VER}-armhf
+
+podman manifest push docker.io/$REPOUSER/tangd:$VER
+
+
 
 
 ## Usage Examples
